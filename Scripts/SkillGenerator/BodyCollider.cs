@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace develop_tps
+namespace develop_body
 {
     public enum EBodyType
     {
