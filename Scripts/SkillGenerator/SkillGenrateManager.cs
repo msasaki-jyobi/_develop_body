@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace develop_body
 {
-    public class SkillGenratorManager : MonoBehaviour
+    public class SkillGenrateManager : MonoBehaviour
     {
         private float _recordTime;
 
