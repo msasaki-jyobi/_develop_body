@@ -3871,8 +3871,10 @@ MonoBehaviour:
   - Jump
   - Locomotion
   - Damage
-  - None
-  - GetUp
+  - Paired_Clothesline_Vic
+  - Paired_Clothesline_Att
+  - Additive None
+  - Additive GetUp
 --- !u!54 &680506947
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3965,9 +3967,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 680506945}
-  Alpha1KeyPlayState: State1
-  Alpha1FinishNextState: State3
-  Alpha2KeyPlayAdditiveState: GetUp
+  Alpha1KeyPlayState: Paired_Clothesline_Vic
+  Alpha1FinishNextState: Paired_Clothesline_Att
+  Alpha2KeyPlayAdditiveState: Additive Damage
   Alpha2KeyPlayAdditivefadeLength: 0
   DebugStatePlayType: 0
   DebugStateReset: 0
