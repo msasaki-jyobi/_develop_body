@@ -2,7 +2,6 @@ using develop_body;
 using develop_common;
 using System.Collections;
 using System.Collections.Generic;
-using TNRD;
 using UniRx;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ namespace develop_body
         public GameObject ClickEffect;
 
         // Create Info
-        public SerializableInterface<ICommand> SelectCommand;
+        //public SerializableInterface<ICommand> SelectCommand;
         // Timer
         private ReactiveProperty<float> CommandTimer = new ReactiveProperty<float>();
         public ReactiveProperty<float> RecordTimer = new ReactiveProperty<float>();
