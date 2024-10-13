@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using develop_common;
+using RPGCharacterAnims.Actions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +9,10 @@ namespace develop_body
     public class UnitBody : MonoBehaviour
     {
         public List<BodyCollider> colliders = new List<BodyCollider>();
+
+        public bool IsBodyDamage;
+        public AnimatorStateController AnimatorStateController;
+        public string AdditiveDamageStateName;
 
         public void AddBodyCollider(BodyCollider collider)
         {
@@ -34,6 +40,45 @@ namespace develop_body
             }
 
             return closestCollider;
+        }
+        /// <summary>
+        /// 対象のBodyを返す
+        /// </summary>
+        /// <param name="targetBody"></param>
+        /// <returns></returns>
+        public BodyCollider GetBody(EBodyType targetBody)
+        {
+            foreach (var collider in colliders)
+            {
+                if (collider.bodyType == targetBody)
+                    return collider;
+            }
+            return null;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!IsBodyDamage) return;
+            OnHit(other.gameObject);
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!IsBodyDamage) return;
+            OnHit(collision.gameObject);
+        }
+
+        public void OnHit(GameObject hit)
+        {
+            if(hit.TryGetComponent<TargetShot>(out var targetJump))
+            {
+                targetJump.IsShot = false;
+                AnimatorStateController.AnimatorLayerPlay(1, AdditiveDamageStateName, 0f);
+                
+                hit.transform.parent = GetDistanceBody(hit.transform.position).gameObject.transform;
+                hit.transform.localPosition = Vector3.zero;
+
+            }
         }
     }
 }

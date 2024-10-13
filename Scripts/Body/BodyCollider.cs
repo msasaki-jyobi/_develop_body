@@ -40,10 +40,10 @@ namespace develop_body
             else
                 Debug.LogError($"ParentObjectは見つかりません：{gameObject.name}");
 
-            //if(UnitBody != null)
-            //    UnitBody.AddBodyCollider(this);
-            //else
-            //    Debug.LogError($"UnitBodyは見つかりません:{gameObject.name}");
+            if (UnitBody != null)
+                UnitBody.AddBodyCollider(this);
+            else
+                Debug.LogError($"UnitBodyは見つかりません:{gameObject.name}");
         }
     }
 }
