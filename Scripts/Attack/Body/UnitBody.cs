@@ -56,29 +56,28 @@ namespace develop_body
             return null;
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (!IsBodyDamage) return;
-            OnHit(other.gameObject);
-        }
+        //private void OnTriggerEnter(Collider other)
+        //{
+        //    if (!IsBodyDamage) return;
+        //    OnHit(other.gameObject);
+        //}
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (!IsBodyDamage) return;
-            OnHit(collision.gameObject);
-        }
+        //private void OnCollisionEnter(Collision collision)
+        //{
+        //    if (!IsBodyDamage) return;
+        //    OnHit(collision.gameObject);
+        //}
 
-        public void OnHit(GameObject hit)
-        {
-            if(hit.TryGetComponent<TargetShot>(out var targetJump))
-            {
-                targetJump.IsShot = false;
-                AnimatorStateController.AnimatorLayerPlay(1, AdditiveDamageStateName, 0f);
+        //public void OnHit(GameObject hit)
+        //{
+        //    if(hit.TryGetComponent<TargetShot>(out var targetJump))
+        //    {
+        //        targetJump.IsShot = false;
+        //        AnimatorStateController.AnimatorLayerPlay(1, AdditiveDamageStateName, 0f);
                 
-                hit.transform.parent = GetDistanceBody(hit.transform.position).gameObject.transform;
-                hit.transform.localPosition = Vector3.zero;
-
-            }
-        }
+        //        hit.transform.parent = GetDistanceBody(hit.transform.position).gameObject.transform;
+        //        hit.transform.localPosition = Vector3.zero;
+        //    }
+        //}
     }
 }
