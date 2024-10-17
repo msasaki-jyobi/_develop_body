@@ -15,7 +15,7 @@ namespace develop_body
         [Space(10)]
         public string AdditiveDamageStateName = "DAMAGE00";
         public float HitSpan = 1f;
-        public ClipData HitClip;
+        public develop_common.ClipData HitClip;
         public GameObject HitEffect;
         public string DamageVoiceKind = "’É‚ª‚é";
         [Space(10)]
