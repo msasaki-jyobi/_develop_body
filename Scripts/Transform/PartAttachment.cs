@@ -1,6 +1,10 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UnityEngine.LowLevel;
+using System.Collections.Generic;
+using develop_common;
+using Common.Unit;
 
 public class PartAttachment : MonoBehaviour
 {
@@ -9,9 +13,14 @@ public class PartAttachment : MonoBehaviour
 
     // プレイヤー全体（ルートオブジェクト）
     public Transform PlayerRoot; // プレイヤー全体のルートオブジェクト
+    public Transform Entity; // ルートオブジェクト
+    public UnitParameter UnitParameter; // ルートオブジェクト
 
     // ターゲットオブジェクト（例：敵の吸い込み口）
     public Transform TargetObject;
+
+    public List<StringKeyGameObjectValuePair> BodyTargets = new List<StringKeyGameObjectValuePair>();
+
 
     // 座標と回転のオフセット（インスペクターで調整可能）
     public Vector3 PositionOffset;
@@ -38,13 +47,45 @@ public class PartAttachment : MonoBehaviour
         {
             AttachPlayerToTarget().Forget();
         }
+
+        if (transform.parent != Entity &&
+            UnitParameter.KousokuValue.Value > 0 && UnitParameter.ParentTimer <= 0)
+        {
+            // 離れてたら再実行
+            if (TargetObject != null)
+                if (PartToAttach != null)
+                    if (Vector3.Distance(TargetObject.transform.position, PartToAttach.transform.position) < (PartToAttach.transform.position + PositionOffset).magnitude)
+                        AttachPlayerToTarget().Forget();
+        }
+        else if (UnitParameter.ParentTimer > 0)
+        {
+            UnitParameter.SetEntityParent();
+        }
+
+        if (transform.parent != null && transform.parent.gameObject == null)
+        {
+            // 親オブジェクトが破壊された場合に、自分を切り離す
+            transform.SetParent(Entity);
+            Debug.Log("Parent destroyed, detaching A object.");
+        }
     }
 
     /// <summary>
     /// オブジェクトを上書きしてアタッチする
     /// </summary>
-    public void AttachTarget()
+    public async void AttachTarget(Transform partToAttach, string AttachName, Vector3 positionOffset = default, Vector3 rotationOffset = default)
     {
+        foreach (var target in BodyTargets)
+        {
+            if (target.Key == AttachName)
+                PartToAttach = target.Value.transform;
+        }
+        TargetObject = partToAttach;
+        PositionOffset = positionOffset;
+        RotationOffset = rotationOffset;
+
+        AttachPlayerToTarget().Forget();
+        await UniTask.Delay(10);
         AttachPlayerToTarget().Forget();
     }
 
