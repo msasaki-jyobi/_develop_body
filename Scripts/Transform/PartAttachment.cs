@@ -4,7 +4,6 @@ using System.Threading;
 using UnityEngine.LowLevel;
 using System.Collections.Generic;
 using develop_common;
-using Common.Unit;
 
 public class PartAttachment : MonoBehaviour
 {
@@ -14,7 +13,7 @@ public class PartAttachment : MonoBehaviour
     // プレイヤー全体（ルートオブジェクト）
     public Transform PlayerRoot; // プレイヤー全体のルートオブジェクト
     public Transform Entity; // ルートオブジェクト
-    public UnitParameter UnitParameter; // ルートオブジェクト
+    //public UnitParameter UnitParameter; // ルートオブジェクト
 
     // ターゲットオブジェクト（例：敵の吸い込み口）
     public Transform TargetObject;
@@ -48,19 +47,19 @@ public class PartAttachment : MonoBehaviour
             AttachPlayerToTarget().Forget();
         }
 
-        if (transform.parent != Entity &&
-            UnitParameter.KousokuValue.Value > 0 && UnitParameter.ParentTimer <= 0)
-        {
-            // 離れてたら再実行
-            if (TargetObject != null)
-                if (PartToAttach != null)
-                    if (Vector3.Distance(TargetObject.transform.position, PartToAttach.transform.position) < (PartToAttach.transform.position + PositionOffset).magnitude)
-                        AttachPlayerToTarget().Forget();
-        }
-        else if (UnitParameter.ParentTimer > 0)
-        {
-            UnitParameter.SetEntityParent();
-        }
+        //if (transform.parent != Entity &&
+        //    UnitParameter.KousokuValue.Value > 0 && UnitParameter.ParentTimer <= 0)
+        //{
+        //    // 離れてたら再実行
+        //    if (TargetObject != null)
+        //        if (PartToAttach != null)
+        //            if (Vector3.Distance(TargetObject.transform.position, PartToAttach.transform.position) < (PartToAttach.transform.position + PositionOffset).magnitude)
+        //                AttachPlayerToTarget().Forget();
+        //}
+        //else if (UnitParameter.ParentTimer > 0)
+        //{
+        //    UnitParameter.SetEntityParent();
+        //}
 
         if (transform.parent != null && transform.parent.gameObject == null)
         {
