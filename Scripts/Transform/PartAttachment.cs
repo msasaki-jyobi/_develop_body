@@ -9,12 +9,15 @@ using Common.Unit;
 
 public class PartAttachment : MonoBehaviour
 {
+    public Transform PlayerRoot; // プレイヤー全体のルートオブジェクト
+    public Transform Entity; // ルートオブジェクト
+    public Sprite FaceImage; // ルートオブジェクト
+
+    [Space(10)]
     // インスペクターで指定する部位（例：HeadColliderやHipsCollider）
     public Transform PartToAttach; // プレイヤーの特定の部位を設定
 
     // プレイヤー全体（ルートオブジェクト）
-    public Transform PlayerRoot; // プレイヤー全体のルートオブジェクト
-    public Transform Entity; // ルートオブジェクト
     //public UnitParameter UnitParameter; // ルートオブジェクト
 
     // ターゲットオブジェクト（例：敵の吸い込み口）
@@ -158,11 +161,11 @@ public class PartAttachment : MonoBehaviour
     //    }
     //}
 
-    public GameObject GetBody(string attachName)
+    public GameObject GetBody(string keyName)
     {
         foreach (var target in BodyTargets)
         {
-            if (target.Key == attachName)
+            if (target.Key == keyName)
                 return target.Value;
         }
         return null;
