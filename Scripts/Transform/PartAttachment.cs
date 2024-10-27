@@ -4,6 +4,8 @@ using System.Threading;
 using UnityEngine.LowLevel;
 using System.Collections.Generic;
 using develop_common;
+using UniRx;
+using Common.Unit;
 
 public class PartAttachment : MonoBehaviour
 {
@@ -39,6 +41,10 @@ public class PartAttachment : MonoBehaviour
     {
         cancellationTokenSource?.Cancel();
     }
+    private void Start()
+    {
+
+    }
 
     private void Update()
     {
@@ -61,12 +67,14 @@ public class PartAttachment : MonoBehaviour
         //    UnitParameter.SetEntityParent();
         //}
 
-        if (transform.parent != null && transform.parent.gameObject == null)
-        {
-            // 親オブジェクトが破壊された場合に、自分を切り離す
-            transform.SetParent(Entity);
-            Debug.Log("Parent destroyed, detaching A object.");
-        }
+        //if (transform.parent != null && transform.parent.gameObject == null)
+        //{
+        //    // 親オブジェクトが破壊された場合に、自分を切り離す
+        //    transform.SetParent(Entity);
+        //    Debug.Log("Parent destroyed, detaching A object.");
+        //}
+
+
     }
 
     /// <summary>
@@ -85,6 +93,11 @@ public class PartAttachment : MonoBehaviour
 
         AttachPlayerToTarget().Forget();
         await UniTask.Delay(10);
+        AttachPlayerToTarget().Forget();
+    }
+
+    public void ForgetAttach()
+    {
         AttachPlayerToTarget().Forget();
     }
 
@@ -144,4 +157,15 @@ public class PartAttachment : MonoBehaviour
     //        AttachDirectly(); // インスペクターでの調整時に即座に反映
     //    }
     //}
+
+    public GameObject GetBody(string attachName)
+    {
+        foreach (var target in BodyTargets)
+        {
+            if (target.Key == attachName)
+                return target.Value;
+        }
+        return null;
+    }
+
 }
