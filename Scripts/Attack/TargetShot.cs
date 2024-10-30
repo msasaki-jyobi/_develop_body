@@ -89,7 +89,7 @@ namespace develop_body
                     AudioManager.Instance.PlayOneShotClipData(HitClip);
                     UtilityFunction.PlayEffect(gameObject, HitEffect);
                     // ダメージボイス
-                    InstanceManager.Instance.UnitVoice.PlayVoice(DamageVoiceKind);
+                    //InstanceBody.Instance.UnitVoice.PlayVoice(DamageVoiceKind);
 
                 }
                 if (_isBodyHit) return;
