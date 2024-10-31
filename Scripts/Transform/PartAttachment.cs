@@ -40,8 +40,11 @@ public class PartAttachment : MonoBehaviour
 
     // 2回目の処理のためのディレイ（ms単位）
     public int delayBetweenSteps = 10;
+
     // 固定化判定
     public bool IsPull;
+    // 投げ判定用（ここじゃなくてもいいかも）
+    public bool IsDown;
     private Tween rotationTween; // 回転アニメーションを管理するためのTweenオブジェクト
 
     void OnDisable()
@@ -166,9 +169,6 @@ public class PartAttachment : MonoBehaviour
 
         // ターゲットオブジェクトの子オブジェクトとしてセット
         PlayerRoot.SetParent(TargetObject);
-
-        Debug.Log($"**X**: ");
-
     }
 
     //// インスペクターでの調整時にすぐに結果が見えるようにするため
