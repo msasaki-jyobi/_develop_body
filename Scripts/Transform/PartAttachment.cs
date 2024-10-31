@@ -5,12 +5,13 @@ using UnityEngine.LowLevel;
 using System.Collections.Generic;
 using develop_common;
 using UniRx;
- 
+using DG.Tweening;
+
 public class PartAttachment : MonoBehaviour
 {
     public Transform PlayerRoot; // プレイヤー全体のルートオブジェクト
     public Transform Entity; // ルートオブジェクト
-    public Sprite FaceImage; // ルートオブジェクト
+    public Sprite FaceImage;
 
     [Space(10)]
     // インスペクターで指定する部位（例：HeadColliderやHipsCollider）
@@ -22,6 +23,7 @@ public class PartAttachment : MonoBehaviour
     // ターゲットオブジェクト（例：敵の吸い込み口）
     public Transform TargetObject;
 
+    [Header("固定化参照用")]
     public List<StringKeyGameObjectValuePair> BodyTargets = new List<StringKeyGameObjectValuePair>();
 
 
@@ -38,6 +40,9 @@ public class PartAttachment : MonoBehaviour
 
     // 2回目の処理のためのディレイ（ms単位）
     public int delayBetweenSteps = 10;
+    // 固定化判定
+    public bool IsPull;
+    private Tween rotationTween; // 回転アニメーションを管理するためのTweenオブジェクト
 
     void OnDisable()
     {
@@ -53,6 +58,15 @@ public class PartAttachment : MonoBehaviour
         if (IsDebugK && Input.GetKeyDown(KeyCode.K))
         {
             AttachPlayerToTarget().Forget();
+        }
+
+        // 固定化する必要があるのに、離れている場合
+        if(IsPull)
+        {
+            var playerPos = PlayerRoot.transform.position;
+            var targetPos = TargetObject.transform.position + PositionOffset;
+            if (Vector3.Distance(playerPos, targetPos) >= 0.1f)
+                AttachPlayerToTarget().Forget();
         }
 
         //if (transform.parent != Entity &&
@@ -92,6 +106,8 @@ public class PartAttachment : MonoBehaviour
         TargetObject = partToAttach;
         PositionOffset = positionOffset;
         RotationOffset = rotationOffset;
+
+        IsPull = true;
 
         AttachPlayerToTarget().Forget();
         await UniTask.Delay(10);
@@ -172,6 +188,30 @@ public class PartAttachment : MonoBehaviour
                 return target.Value;
         }
         return null;
+    }
+    /// <summary>
+    /// 親オブジェクトを解除する
+    /// PullOFFの攻撃を受けたタイミングで呼ばれ、オブジェクトが解除される。
+    /// 起き上がりをどうするか？
+    /// </summary>
+    public async void SetEntityParent()
+    {
+        IsPull = false;
+        PlayerRoot.transform.parent = Entity.transform;
+
+        // すでに回転中のアニメーションがある場合はキャンセル
+        rotationTween?.Kill();
+
+        // 目標の回転値を設定 (0, 現在のY軸, 0)
+        Vector3 targetRotation = new Vector3(0, PlayerRoot.transform.rotation.eulerAngles.y, 0);
+
+        // DoTweenで回転アニメーションを作成
+        rotationTween = PlayerRoot.transform.DORotate(targetRotation, 0.3f)
+            .SetEase(Ease.Linear)    // 線形補間
+            .SetLink(PlayerRoot.gameObject);    // ゲームオブジェクトにリンク（破棄時に自動キャンセル）
+
+        // アニメーションが完了するのを待機
+        await rotationTween.AsyncWaitForCompletion();
     }
 
 }
