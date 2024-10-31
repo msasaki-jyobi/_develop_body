@@ -96,6 +96,7 @@ public class PartAttachment : MonoBehaviour
         AttachPlayerToTarget().Forget();
         await UniTask.Delay(10);
         AttachPlayerToTarget().Forget();
+
     }
 
     public void ForgetAttach()
@@ -149,6 +150,9 @@ public class PartAttachment : MonoBehaviour
 
         // ターゲットオブジェクトの子オブジェクトとしてセット
         PlayerRoot.SetParent(TargetObject);
+
+        Debug.Log($"**X**: ");
+
     }
 
     //// インスペクターでの調整時にすぐに結果が見えるようにするため
