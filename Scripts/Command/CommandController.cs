@@ -59,7 +59,7 @@ namespace develop_body
                 {
                     bodyCollider = UnitBody.GetDistanceBody(hit.transform.position);
                     if (bodyCollider != null)
-                        Debug.Log($"{bodyCollider}にタッチ. Type:{bodyCollider.bodyType}, Value:{bodyCollider.BodyParameter}");
+                        Debug.Log($"{bodyCollider}にタッチ. Type:{bodyCollider.BodyType}, Value:{bodyCollider.BodyParameter}");
                     else
                     {
                         Debug.LogError("bodyColliderはNullです");
@@ -208,7 +208,7 @@ namespace develop_body
                 {
                     var bodyCollider = UnitBody.GetDistanceBody(hit);
                     if (bodyCollider != null)
-                        Debug.Log($"{bodyCollider}にタッチ. Type:{bodyCollider.bodyType}, Value:{bodyCollider.BodyParameter}");
+                        Debug.Log($"{bodyCollider}にタッチ. Type:{bodyCollider.BodyType}, Value:{bodyCollider.BodyParameter}");
                 }
             }
         }

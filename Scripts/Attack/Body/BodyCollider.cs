@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using develop_common;
+using EZAddresser.Editor.Foundation.DomainModel;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace develop_body
@@ -28,22 +31,35 @@ namespace develop_body
     }
     public class BodyCollider : MonoBehaviour
     {
-        public EBodyType bodyType;
+        public EBodyType BodyType;
+        public GameObject RootObject;
+        public UnitInstance UnitInstance;
         public GameObject ParentObject;
+
+
+
+        [Header("使わない")]
         public UnitBody UnitBody;
         public int BodyParameter;
 
-        private void Start()
+        private void Awake()
         {
             if (ParentObject != null)
                 transform.parent = ParentObject.transform;
-            else
-                Debug.LogError($"ParentObjectは見つかりません：{gameObject.name}");
+        }
 
+        private void Start()
+        {
             if (UnitBody != null)
                 UnitBody.AddBodyCollider(this);
-            else
-                Debug.LogError($"UnitBodyは見つかりません:{gameObject.name}");
+
+            if (UnitInstance != null)
+            {
+                //var pair = new StringKeyGameObjectValuePair(BodyType.ToString(), gameObject);
+                var pair = new StringKeyGameObjectValuePair();
+                pair.SetPair(BodyType.ToString(), gameObject);
+                UnitInstance.InstanceBodys.Add(pair);
+            }
         }
     }
 }

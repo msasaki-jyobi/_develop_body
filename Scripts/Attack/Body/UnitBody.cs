@@ -13,6 +13,9 @@ namespace develop_body
         public AnimatorStateController AnimatorStateController;
         public string AdditiveDamageStateName;
 
+
+
+
         public void AddBodyCollider(BodyCollider collider)
         {
             colliders.Add(collider);
@@ -49,7 +52,7 @@ namespace develop_body
         {
             foreach (var collider in colliders)
             {
-                if (collider.bodyType == targetBody)
+                if (collider.BodyType == targetBody)
                     return collider;
             }
             return null;
