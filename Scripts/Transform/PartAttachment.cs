@@ -6,9 +6,12 @@ using System.Collections.Generic;
 using develop_common;
 using UniRx;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 public class PartAttachment : MonoBehaviour
 {
+    public UnitInstance UnitInstance;
+
     public Transform PlayerRoot; // プレイヤー全体のルートオブジェクト
     public Transform Entity; // ルートオブジェクト
     public Sprite FaceImage;
@@ -23,8 +26,8 @@ public class PartAttachment : MonoBehaviour
     // ターゲットオブジェクト（例：敵の吸い込み口）
     public Transform TargetObject;
 
-    [Header("固定化参照用")]
-    public List<StringKeyGameObjectValuePair> BodyTargets = new List<StringKeyGameObjectValuePair>();
+    //[Header("固定化参照用")]
+    //public List<StringKeyGameObjectValuePair> BodyTargets = new List<StringKeyGameObjectValuePair>();
 
 
     // 座標と回転のオフセット（インスペクターで調整可能）
@@ -64,7 +67,7 @@ public class PartAttachment : MonoBehaviour
         }
 
         // 固定化する必要があるのに、離れている場合
-        if(IsPull)
+        if (IsPull)
         {
             var playerPos = PlayerRoot.transform.position;
             var targetPos = TargetObject.transform.position + PositionOffset;
@@ -101,7 +104,7 @@ public class PartAttachment : MonoBehaviour
     /// </summary>
     public async void AttachTarget(Transform partToAttach, string AttachName, Vector3 positionOffset = default, Vector3 rotationOffset = default)
     {
-        foreach (var target in BodyTargets)
+        foreach (var target in UnitInstance.InstanceBodys)
         {
             if (target.Key == AttachName)
                 PartToAttach = target.Value.transform;
@@ -182,7 +185,7 @@ public class PartAttachment : MonoBehaviour
 
     public GameObject GetBody(string keyName)
     {
-        foreach (var target in BodyTargets)
+        foreach (var target in UnitInstance.InstanceBodys)
         {
             if (target.Key == keyName)
                 return target.Value;
@@ -213,5 +216,61 @@ public class PartAttachment : MonoBehaviour
         // アニメーションが完了するのを待機
         await rotationTween.AsyncWaitForCompletion();
     }
+
+    // 敵の技を発動するメソッド（引数を使用）
+    public void ActivateAbility(Transform playerHead, Transform enemyRoot, Transform hammer, Vector3 offset)
+    {
+        // B を Aにくっつける
+        // 頭　を　掃除機　にくっつける
+        var A = TargetObject;
+        var B = PartToAttach;
+        var C = PlayerRoot;
+
+        A = playerHead;
+        B = hammer;
+        C = enemyRoot;
+
+        Vector3 rot = C.transform.rotation.eulerAngles;
+
+        // ターゲットオブジェクトの座標・回転を取得
+        Vector3 targetPosition = A.position + A.TransformDirection(PositionOffset);
+        Quaternion targetRotation = A.rotation * Quaternion.Euler(RotationOffset);
+
+        // 基準となる部位（PartToAttach）の現在のワールド座標と回転を取得
+        Vector3 partWorldPosition = B.position;
+        Quaternion partWorldRotation = B.rotation;
+
+        // PlayerRootの位置を移動させる際に、部位の位置がターゲットにぴったり合うように移動
+        Vector3 positionDifference = targetPosition - partWorldPosition;
+        C.position += positionDifference;
+        C.position += UtilityFunction.LocalLookPos(PlayerRoot.transform, offset);
+
+        // 部位の回転がターゲットの回転にぴったり合うように、PlayerRootの回転を更新
+        Quaternion rotationDifference = targetRotation * Quaternion.Inverse(partWorldRotation);
+        C.rotation = rotationDifference * C.rotation;
+        C.rotation = Quaternion.Euler(0, C.transform.rotation.eulerAngles.y, 0);
+
+        // ターゲットオブジェクトの子オブジェクトとしてセット
+        //C.SetParent(A);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
