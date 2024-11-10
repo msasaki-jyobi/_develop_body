@@ -185,6 +185,11 @@ public class PartAttachment : MonoBehaviour
 
     public GameObject GetBody(string keyName)
     {
+        if(UnitInstance == null)
+        {
+            Debug.LogError($"{keyName}, UnitInstance‚ÍNull‚Å‚·. ");
+            return null;
+        }
         foreach (var target in UnitInstance.InstanceBodys)
         {
             if (target.Key == keyName)
