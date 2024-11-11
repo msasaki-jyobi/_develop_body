@@ -206,6 +206,9 @@ public class PartAttachment : MonoBehaviour
     /// </summary>
     public async void SetEntityParent()
     {
+        if (PlayerRoot == null) return;
+        if (Entity == null) return;
+
         IsPull = false;
         PlayerRoot.transform.parent = Entity.transform;
 
