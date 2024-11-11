@@ -75,8 +75,7 @@ public class PartAttachment : MonoBehaviour
                 AttachPlayerToTarget().Forget();
         }
 
-        //if (transform.parent != Entity &&
-        //    UnitParameter.KousokuValue.Value > 0 && UnitParameter.ParentTimer <= 0)
+        //if (transform.parent != Entity)
         //{
         //    // —£‚ê‚Ä‚½‚çÄŽÀs
         //    if (TargetObject != null)
@@ -84,6 +83,7 @@ public class PartAttachment : MonoBehaviour
         //            if (Vector3.Distance(TargetObject.transform.position, PartToAttach.transform.position) < (PartToAttach.transform.position + PositionOffset).magnitude)
         //                AttachPlayerToTarget().Forget();
         //}
+
         //else if (UnitParameter.ParentTimer > 0)
         //{
         //    UnitParameter.SetEntityParent();
