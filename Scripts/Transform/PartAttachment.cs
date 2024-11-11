@@ -118,6 +118,8 @@ public class PartAttachment : MonoBehaviour
         AttachPlayerToTarget().Forget();
         await UniTask.Delay(10);
         AttachPlayerToTarget().Forget();
+        await UniTask.Delay(10);
+        AttachPlayerToTarget().Forget();
 
     }
 
