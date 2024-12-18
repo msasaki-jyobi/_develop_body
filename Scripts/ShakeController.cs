@@ -30,7 +30,7 @@ namespace develop_body
         // 座標移動の仕方を指定
         public EShakeMoveType ShakeMoveType;
         // Shakeの動きを許可
-        public bool ShakeFlg;
+        //public bool ShakeFlg;
         // 大きくすると振幅が増える
         public float Spring = 0.05f;
         // 小さくすると振動する時間が短くなる(減衰しやすく）
@@ -62,6 +62,8 @@ namespace develop_body
         private void Start()
         {
             _defaultPosition = transform.localPosition;
+
+
         }
 
 
@@ -81,12 +83,12 @@ namespace develop_body
             pos.z = Mathf.Clamp(pos.z, _defaultPosition.z - Distance, _defaultPosition.z + Distance);
             transform.localPosition = pos;
 
-            if (!ShakeFlg)
-            {
-                // 徐々にControllerの位置を追いかける
-                transform.position = Vector3.Lerp(transform.position, Controller.transform.position, FollowSpeed * Time.deltaTime);
-                return;
-            }
+            //if (!ShakeFlg)
+            //{
+            //    // 徐々にControllerの位置を追いかける
+            //    transform.position = Vector3.Lerp(transform.position, Controller.transform.position, FollowSpeed * Time.deltaTime);
+            //    return;
+            //}
 
             // Shake
             switch (ShakeType)
@@ -130,7 +132,6 @@ namespace develop_body
 
         public void SpringShake()
         {
-            if (!ShakeFlg) return;
 
             Vector3 diff = _defaultPosition - transform.localPosition;
             _v += diff * Spring;
@@ -140,7 +141,6 @@ namespace develop_body
 
         public void EasingShake()
         {
-            if (!ShakeFlg) return;
 
             Vector3 diff = _defaultPosition - transform.localPosition;
             _v = diff * Easing;
@@ -152,7 +152,6 @@ namespace develop_body
         /// </summary>
         private void TypeMove()
         {
-            if (!ShakeFlg) return;
             transform.localPosition = _moveTargetObject.transform.localPosition;
         }
 
@@ -161,7 +160,6 @@ namespace develop_body
         /// </summary>
         private void TypeMoveTime()
         {
-            if (!ShakeFlg) return;
             _moveTimer += Time.deltaTime;
             if (_moveTimer <= _moveSpanTime)
             {
@@ -239,14 +237,7 @@ namespace develop_body
             transform.localScale = new Vector3(size, size, size);
         }
 
-        /// <summary>
-        /// プルプルの機能をON/OFFします
-        /// </summary>
-        /// <param name="flg"></param>
-        public void ShakeFlgChange(bool flg)
-        {
-            ShakeFlg = flg;
-        }
+
 
         /// <summary>
         /// 親オブジェクトを切り替えます
@@ -255,15 +246,7 @@ namespace develop_body
         {
             transform.parent = obj.transform;
         }
-        /// <summary>
-        /// 移動状態を初期位置に戻す
-        /// </summary>
-        public async void Reset()
-        {
-            ShakeFlg = true;
-            await UniTask.Delay(10);
-            ShakeFlg = false;
-        }
+
 
         public async void MoveToOffset(Vector3 min, Vector3 max, float time)
         {
